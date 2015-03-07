@@ -348,6 +348,7 @@ if (typeof VMM != "undefined") {
         if (typeof jQuery != "undefined") {
             jQuery(element).trigger(_event_type, _data)
         }
+        console.log(_event_type);
     };
     VMM.getJSON = function(url, data, callback) {
         if (typeof jQuery != "undefined") {
@@ -363,6 +364,7 @@ if (typeof VMM != "undefined") {
         }
     };
     VMM.parseJSON = function(the_json) {
+        console.log("parseJSON VMM");
         if (typeof jQuery != "undefined") {
             return jQuery.parseJSON(the_json)
         }
@@ -5676,6 +5678,7 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
         }
 
         function onZoomIn() {
+            console.log("in zoom in");
             $dragslide.cancelSlide();
             if (config.nav.multiplier.current > config.nav.multiplier.min) {
                 if (config.nav.multiplier.current <= 1) {
@@ -6818,6 +6821,7 @@ if (typeof VMM.Timeline !== "undefined" && typeof VMM.Timeline.DataObj == "undef
             VMM.fireEvent(global, VMM.Timeline.Config.events.messege, VMM.Timeline.Config.language.messages.loading_timeline);
             if (type.of(raw_data) == "object") {
                 trace("DATA SOURCE: JSON OBJECT");
+                console.log("DATA SOURCE: JSON OBJECT");
                 VMM.Timeline.DataObj.parseJSON(raw_data)
             } else if (type.of(raw_data) == "string") {
                 if (raw_data.match("%23")) {
@@ -6924,8 +6928,13 @@ if (typeof VMM.Timeline !== "undefined" && typeof VMM.Timeline.DataObj == "undef
         },
         parseJSON: function(d) {
             trace("parseJSON");
+            console.log("parseJSON");
             if (d.timeline.type == "default") {
                 trace("DATA SOURCE: JSON STANDARD TIMELINE");
+                console.log("parseJSON -2");
+                VMM.fireEvent(global, VMM.Timeline.Config.events.data_ready, d)
+            } else if (d.timeline.type == "story") {
+                trace("DATA SOURCE: JSON Story TIMELINE");
                 VMM.fireEvent(global, VMM.Timeline.Config.events.data_ready, d)
             } else if (d.timeline.type == "twitter") {
                 trace("DATA SOURCE: JSON TWEETS");
