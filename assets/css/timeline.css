@@ -2080,6 +2080,20 @@ only screen and (min-device-pixel-ratio: 2) {
     width: 153px;
     height: 26px
 }
+.vco-timeline .vco-navigation .timenav .content .marker.active-story .flag {
+    background-image: url(timeline2.png?v4.4);
+    background-repeat: no-repeat;
+    background-position: 0 -53px;
+    width: 153px;
+    height: 53px
+}
+.vco-timeline .vco-navigation .timenav .content .marker.active-story .flag-small {
+    background-image: url(timeline2.png?v4.4);
+    background-repeat: no-repeat;
+    background-position: 0 -109px;
+    width: 153px;
+    height: 26px
+}
 .vco-timeline .vco-navigation .timenav .content .marker.active .flag-small .flag-content {
     height: 14px
 }

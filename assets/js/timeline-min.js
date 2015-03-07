@@ -348,11 +348,6 @@ if (typeof VMM != "undefined") {
         if (typeof jQuery != "undefined") {
             jQuery(element).trigger(_event_type, _data)
         }
-        console.log("-----");
-        console.log(_data);
-        console.log(_event_type);
-        console.log(the_event_type);
-        console.log("-----");
     };
     VMM.getJSON = function(url, data, callback) {
         if (typeof jQuery != "undefined") {
@@ -402,6 +397,7 @@ if (typeof VMM != "undefined") {
         if (typeof jQuery != "undefined") {
             jQuery(append_stories_to_element).attr("story", story_numbers);
         }
+        return _story_numbers;
     };
     VMM.Lib = {
         init: function() {
@@ -5815,17 +5811,30 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
                 _duration = duration
             }
             for (var i = 0; i < markers.length; i++) {
-                VMM.Lib.removeClass(markers[i].marker, "active")
+                VMM.Lib.removeClass(markers[i].marker, "active");
+                VMM.Lib.removeClass(markers[i].marker, "active-story");
             }
             if (config.start_page && markers[0].type == "start") {
                 VMM.Lib.visible(markers[0].marker, false);
                 VMM.Lib.addClass(markers[0].marker, "start")
             }
             VMM.Lib.addClass(markers[current_marker].marker, "active");
+            markSameStories(current_marker);
             VMM.Lib.stop($timenav);
             VMM.Lib.animate($timenav, _duration, _ease, {
                 left: timenav_pos.left
             })
+        }
+
+        function markSameStories(n) {
+        	current_marker = n;
+        	var story = markers[current_marker].stories[0];
+        	console.log("Story is: " + story);
+        	for(var i = 0; i < markers.length; i++) {
+        		if (markers[i].stories.indexOf(markers[current_marker].stories[0]) != -1) {
+        			VMM.Lib.addClass(markers[i].marker, "active-story");
+        		}
+        	}
         }
 
         function onTouchUpdate(e, b) {
@@ -6686,11 +6695,12 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
             markers = [];
             era_markers = [];
             for (i = 0; i < data.length; i++) {
-                var _marker, _marker_flag, _marker_content, _marker_dot, _marker_line, _marker_line_event, _marker_obj, _marker_title = "",
+                var _marker, _marker_stories, _marker_flag, _marker_content, _marker_dot, _marker_line, _marker_line_event, _marker_obj, _marker_title = "",
                     has_title = false;
                 _marker = VMM.appendAndGetElement($content, "<div>", "marker");
-                console.log(data[i]);
-                VMM.addStoryNumbers(_marker, data[i].stories);
+                _marker_stories = VMM.addStoryNumbers(_marker, data[i].stories);
+                _marker_stories = _marker_stories.split(',');
+                console.log(_marker_stories);
                 _marker_flag = VMM.appendAndGetElement(_marker, "<div>", "flag");
                 _marker_content = VMM.appendAndGetElement(_marker_flag, "<div>", "flag-content");
                 _marker_dot = VMM.appendAndGetElement(_marker, "<div>", "dot");
@@ -6741,6 +6751,7 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
                 });
                 _marker_obj = {
                     marker: _marker,
+                    stories: _marker_stories,
                     flag: _marker_flag,
                     lineevent: _marker_line_event,
                     type: "marker",
