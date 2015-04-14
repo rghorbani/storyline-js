@@ -1739,6 +1739,9 @@ only screen and (min-device-pixel-ratio: 2) {
     -moz-opacity: 1;
     opacity: 1
 }
+.vco-notouch .vco-navigation .timenav .content .marker.hide-story {
+    display: none;
+}
 .vco-notouch .vco-navigation .timenav .content .marker.active:hover {
     cursor: default
 }

@@ -5440,6 +5440,7 @@ if (typeof VMM != "undefined" && typeof VMM.Timeline == "undefined") {
                         _date.title = data.date[i].headline;
                         _date.headline = data.date[i].headline;
                         _date.type = data.date[i].type;
+                        _date.priority = data.date[i].priority;
                         _date.stories = data.date[i].stories;
                         _date.date = VMM.Date.prettyDate(_date.startdate, false, _date.precisiondate);
                         _date.asset = data.date[i].asset;
@@ -5835,6 +5836,26 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
         			VMM.Lib.addClass(markers[i].marker, "active-story");
         		}
         	}
+        }
+
+        function hideSecondaryStories() {
+            var stages_tmp = new Set();
+            for(var i = 0; i < markers.length; i++) {
+                stages_tmp.add(markers[i].priority);
+            }
+            var iter = stages_tmp.values();
+            var stages = [];
+            for(var i = 0; i < stages_tmp.size; i++) {
+                stages.push(iter.next().value);
+            }
+            stages.sort();
+            for(var i = 0; i < markers.length; i++) {
+                if(i != 0 && markers[i].priority != stages[0]) {
+                    markers[i].show = false;
+                    console.log("hide");
+                    VMM.Lib.addClass(markers[i].marker, "hide-story");
+                }
+            }
         }
 
         function onTouchUpdate(e, b) {
@@ -6700,7 +6721,7 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
                 _marker = VMM.appendAndGetElement($content, "<div>", "marker");
                 _marker_stories = VMM.addStoryNumbers(_marker, data[i].stories);
                 _marker_stories = _marker_stories.split(',');
-                console.log(_marker_stories);
+                // console.log(_marker_stories);
                 _marker_flag = VMM.appendAndGetElement(_marker, "<div>", "flag");
                 _marker_content = VMM.appendAndGetElement(_marker_flag, "<div>", "flag-content");
                 _marker_dot = VMM.appendAndGetElement(_marker, "<div>", "dot");
@@ -6751,6 +6772,8 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
                 });
                 _marker_obj = {
                     marker: _marker,
+                    priority: data[i].priority,
+                    show: true,
                     stories: _marker_stories,
                     flag: _marker_flag,
                     lineevent: _marker_line_event,
@@ -6773,6 +6796,7 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
                 }
                 markers.push(_marker_obj)
             }
+            hideSecondaryStories();
             tags = VMM.Util.deDupeArray(tags);
             config.tagSortFunction(tags);
             if (tags.length > 3) {
