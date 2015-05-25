@@ -14,11 +14,12 @@
         },
 		"date": [
             {
-                "stories":"1",
+                "self_id": "1",
+                "parent_id":"0",
                 "priority":"2",
                 "startDate":"1963,8,9",
                 "headline":"A Musical Heritage",
-                "text":"<p>Born in New Jersey on August 9th, 1963, Houston grew up surrounded by the music business. Her mother is gospel singer Cissy Houston and her cousins are Dee Dee and Dionne Warwick.</p>",
+                "text":"<p><a href='p30download.com'>Test link</a> Born in New Jersey on August 9th, 1963, Houston grew up surrounded by the music business. Her mother is gospel singer Cissy Houston and her cousins are Dee Dee and Dionne Warwick.</p>",
                 "asset":
                 {
                     "media":"<iframe src='http://rghorbani.ir'></iframe>",
@@ -27,8 +28,9 @@
                 }
             },
             {
-                "stories":"2",
-                "priority":"1",
+                "self_id": "2",
+                "parent_id":"",
+                "priority":"2",
                 "startDate":"1978",
                 "headline":"First Recording",
                 "text":"At the age of 15 Houston was featured on Michael Zager's song, Life's a Party.",
@@ -40,7 +42,8 @@
                 }
             },
             {
-                "stories":"1",
+                "self_id": "3",
+                "parent_id":"2",
                 "priority":"1",
                 "startDate":"1978",
                 "headline":"The Early Years",
@@ -53,7 +56,8 @@
                 }
             },
             {
-                "stories":"1,2",
+                "self_id": "4",
+                "parent_id":"2",
                 "priority":"1",
                 "startDate":"1978",
                 "headline":"Early Album Credits",
@@ -66,7 +70,8 @@
                 }
             },
             {
-                "stories":"1",
+                "self_id": "5",
+                "parent_id":"1",
                 "priority":"1",
                 "startDate":"1983",
                 "headline":"Signed",
@@ -78,8 +83,9 @@
                     "caption":"Whitney Houston and Clive Davis discussing her discovery and her eponymous first album."
                 }
             },
-             {
-                "stories":"1",
+            {
+                "self_id": "6",
+                "parent_id":"5",
                 "priority":"1",
                 "startDate":"1985",
                 "headline":"Debut",
@@ -92,7 +98,8 @@
                 }
             },
             {
-                "stories":"2",
+                "self_id": "7",
+                "parent_id":"6",
                 "priority":"1",
                 "startDate":"1986",
                 "headline":"'The Grammys'",
@@ -105,7 +112,8 @@
                 }
             },
             {
-                "stories":"2",
+                "self_id": "8",
+                "parent_id":"7",
                 "priority":"1",
                 "startDate":"1987",
                 "headline":"'Whitney'",
@@ -118,7 +126,8 @@
                 }
             },
             {
-                "stories":"1,2",
+                "self_id": "9",
+                "parent_id":"4",
                 "priority":"1",
                 "startDate":"1988",
                 "headline":"\"One Moment In Time\"",
@@ -131,7 +140,8 @@
                 }
             },
             {
-                "stories":"1",
+                "self_id": "10",
+                "parent_id":"9",
                 "priority":"1",
                 "startDate":"1989",
                 "headline":"Bobby Brown",
@@ -144,7 +154,8 @@
                 }
             },
             {
-                "stories":"1",
+                "self_id": "11",
+                "parent_id":"7",
                 "priority":"1",
                 "startDate":"1991",
                 "headline":"Super Bowl",
@@ -157,7 +168,8 @@
                 }
             },
             {
-                "stories":"1",
+                "self_id": "12",
+                "parent_id":"10",
                 "priority":"1",
                 "startDate":"1992",
                 "headline":"\"The Bodyguard\"",
@@ -170,7 +182,8 @@
                 }
             },
             {
-                "stories":"1",
+                "self_id": "13",
+                "parent_id":"11",
                 "priority":"1",
                 "startDate":"1992",
                 "headline":"Married Life",
@@ -183,7 +196,8 @@
                 }
             },
             {
-                "stories":"2",
+                "self_id": "14",
+                "parent_id":"12",
                 "priority":"1",
                 "startDate":"2002",
                 "headline":"Crack is Whack",
@@ -195,9 +209,9 @@
                     "caption":"Diane Sawyer "
                 }
             },
-            
             {
-                "stories":"1",
+                "self_id": "15",
+                "parent_id":"14",
                 "priority":"1",
                 "startDate":"2004",
                 "headline":"Rehab",
@@ -210,7 +224,8 @@
                 }
             },
             {
-                "stories":"2",
+                "self_id": "16",
+                "parent_id":"15",
                 "priority":"1",
                 "startDate":"2005",
                 "headline":"Being Bobby Brown",
@@ -223,7 +238,8 @@
                 }
             },
             {
-                "stories":"1,2",
+                "self_id": "17",
+                "parent_id":"14",
                 "priority":"1",
                 "startDate":"2010",
                 "headline":"A Rocky Comeback",
@@ -236,7 +252,8 @@
                 }
             },
             {
-                "stories":"1",
+                "self_id": "18",
+                "parent_id":"15",
                 "priority":"1",
                 "startDate":"2012,2,11",
                 "headline":"Whitney Houston<br/> 1963-2012",

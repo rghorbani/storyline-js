@@ -202,36 +202,41 @@ LoadLib = function(doc) {
         }
     }
 }(this.document);
-var WebFontConfig;
-if (typeof embed_path == "undefined") {
-    var _tmp_script_path = getEmbedScriptPath("storyjs-embed.js");
-    var embed_path = _tmp_script_path.substr(0, _tmp_script_path.lastIndexOf("js/"))
-}
 
-function getEmbedScriptPath(scriptname) {
-    var scriptTags = document.getElementsByTagName("script"),
-        script_path = "",
-        script_path_end = "";
-    for (var i = 0; i < scriptTags.length; i++) {
-        if (scriptTags[i].src.match(scriptname)) {
-            script_path = scriptTags[i].src
+var WebFontConfig;
+var embed_path;
+var _tmp_script_path;
+var runningStoryline = function() {
+    if (typeof embed_path == "undefined") {
+        _tmp_script_path = getEmbedScriptPath("storyjs-embed.js");
+        embed_path = _tmp_script_path.substr(0, _tmp_script_path.lastIndexOf("js/"))
+    }
+
+    function getEmbedScriptPath(scriptname) {
+        var scriptTags = document.getElementsByTagName("script"),
+            script_path = "",
+            script_path_end = "";
+        for (var i = 0; i < scriptTags.length; i++) {
+            if (scriptTags[i].src.match(scriptname)) {
+                script_path = scriptTags[i].src
+            }
         }
-    }
-    if (script_path != "") {
-        script_path_end = "/"
-    }
-    return script_path.split("?")[0].split("/").slice(0, -1).join("/") + script_path_end
-}(function() {
-    if (typeof url_config == "object") {
-        createStoryJS(url_config)
-    } else if (typeof timeline_config == "object") {
-        createStoryJS(timeline_config)
-    } else if (typeof storyjs_config == "object") {
-        createStoryJS(storyjs_config)
-    } else if (typeof config == "object") {
-        createStoryJS(config)
-    } else {}
-})();
+        if (script_path != "") {
+            script_path_end = "/"
+        }
+        return script_path.split("?")[0].split("/").slice(0, -1).join("/") + script_path_end
+    }(function() {
+        if (typeof url_config == "object") {
+            createStoryJS(url_config)
+        } else if (typeof timeline_config == "object") {
+            createStoryJS(timeline_config)
+        } else if (typeof storyjs_config == "object") {
+            createStoryJS(storyjs_config)
+        } else if (typeof config == "object") {
+            createStoryJS(config)
+        } else {}
+    })();
+}
 
 function createStoryJS(c, src) {
     var storyjs_embedjs, t, te, x, isCDN = false,
@@ -526,3 +531,14 @@ function createStoryJS(c, src) {
         }
     }
 }
+
+$(document.body).on('click', '.content .text a', function(e) {
+    e.preventDefault();
+    var link = $(this).attr('href');
+    if(link.indexOf('http') == -1) {
+        link = 'http://' + link;
+    }
+    console.log(link);
+    var frame = $(this).closest('.content').find('.media .media-frame');
+    $(frame).attr('src', link);
+});
