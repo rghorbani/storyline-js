@@ -10,6 +10,7 @@
 	<meta name="apple-touch-fullscreen" content="yes">
 	<link rel="stylesheet" href="assets/css/bootstrap.min.css">
 	<link rel="stylesheet" href="assets/css/bootstrap-datetimepicker.min.css">
+	<link rel="stylesheet" href="assets/css/tree.css">
 	<link rel="stylesheet" href="assets/css/page.css">
 	<style>
 		html, body {
@@ -61,11 +62,17 @@
 		</div>
 	</div>
 	<div id="timeline-embed" style="display: none;"></div>
+	<div id="tree-chart" style="display: none;">
+		<div id="graph"></div>
+	</div>
 	<script src="assets/js/jquery-1.11.3.min.js"></script>
 	<script src="assets/js/moment.min.js"></script>
 	<script src="assets/js/bootstrap.min.js"></script>
 	<script src="assets/js/bootstrap-datetimepicker.min.js"></script>
+	<script src="assets/js/d3.js"></script>
+	<script src="assets/js/d3.architectureTree.js"></script>
 	<script type="text/javascript">
+		var main_tree_data;
 		$(function () {
             $('#datetimepicker-from').datetimepicker({
             	format: 'DD/MM/YYYY'

@@ -207,6 +207,7 @@ var WebFontConfig;
 var embed_path;
 var _tmp_script_path;
 var runningStoryline = function() {
+    console.log('running story');
     if (typeof embed_path == "undefined") {
         _tmp_script_path = getEmbedScriptPath("storyjs-embed.js");
         embed_path = _tmp_script_path.substr(0, _tmp_script_path.lastIndexOf("js/"))
@@ -229,6 +230,7 @@ var runningStoryline = function() {
         if (typeof url_config == "object") {
             createStoryJS(url_config)
         } else if (typeof timeline_config == "object") {
+            console.log('timeline config');
             createStoryJS(timeline_config)
         } else if (typeof storyjs_config == "object") {
             createStoryJS(storyjs_config)
@@ -236,6 +238,15 @@ var runningStoryline = function() {
             createStoryJS(config)
         } else {}
     })();
+}
+
+function createChart(json_data) {
+    setTimeout(function() {
+        var chart = d3.chart.architectureTree();
+        chart.diameter(600).data(json_data);
+        d3.select('#tree-chart').call(chart);
+        console.log('chart done.');
+    }, 2000);
 }
 
 function createStoryJS(c, src) {

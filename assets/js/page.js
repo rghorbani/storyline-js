@@ -21,7 +21,7 @@ $('body').on('click', '#search', function(e) {
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
-		url: 'http://localhost/test/test/do1',
+		url: 'http://localhost/test/story/submit_query',
 		data: {
 			query_word: query_word,
 			begin_date: begin_date,
@@ -43,7 +43,7 @@ var retrieveData = function() {
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
-		url: 'http://localhost/test/test/get_data',
+		url: 'http://localhost/test/story/get_data',
 		data: {
 			job_id: job_id
 		},
@@ -51,15 +51,21 @@ var retrieveData = function() {
 			alert('Error occurred at retrieving data!!!');
 			retrieveData();
 		},
-		success: function(data) {
+		success: function(result) {
 			console.log('Data retrieved.');
-			// TODO
+			console.log(result);
+			timeline_config.source = result.data;
+			$('body .container').hide();
+			runningStoryline();
+			$('#timeline-embed').show();
+			// $('#timeline-embed').hide();
+			// $('#tree-chart').show();
+			loadingImage(false);
 		},
 	});
 };
 
 var checkProgress = function() {
-	console.log('Checking...');
 	var progress = parseInt($('div.loading div.progress-bar').attr('aria-valuenow'));
 	setTimeout(function() {
 		progress = $('div.loading div.progress-bar').attr('aria-valuenow');
@@ -67,7 +73,7 @@ var checkProgress = function() {
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
-			url: 'http://localhost/test/test/do2',
+			url: 'http://localhost/test/story/check_progress',
 			data: {
 				job_id: job_id,
 				progress: progress
@@ -83,18 +89,13 @@ var checkProgress = function() {
 				$('div.loading div.progress-bar').attr('style', 'width: ' + data.progress + '%;');
 				$('div.loading div.progress-bar').html(data.progress + '%');
 				if(parseInt(data.progress) < 100) {
-					console.log('again at ' + data.progress);
 					checkProgress();
 				} else {
-					console.log('running timeline...');
-					$('body .container').hide();
-					runningStoryline();
-					$('#timeline-embed').show();
-					loadingImage(false);
+					retrieveData();
 				}
 			},
 		});
-	}, 2000);
+	}, 1000);
 };
 
 // $.ajax({

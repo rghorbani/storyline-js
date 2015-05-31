@@ -5852,6 +5852,19 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
 			// }
 		}
 
+		function findChildren(sid) {
+			var children = [];
+			for (var i = 1; i < markers.length; i++) {
+				if(markers[i].parent_id == sid) {
+					var dd = {};
+					dd.name = markers[i].self_id;
+					dd.children = arguments.callee(markers[i].self_id);
+					children.push(dd);
+				}
+			}
+			return children;
+		}
+
 		function hideSecondaryStories() {
 			var stages_tmp = new Set();
 			for(var i = 0; i < markers.length; i++) {
@@ -6812,6 +6825,13 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
 				}
 				markers.push(_marker_obj)
 			}
+			// building tree json
+			console.log(markers);
+			var tree_data = {};
+			tree_data.name = 'Root';
+			tree_data.children = findChildren("0");
+			main_tree_data = tree_data;
+			createChart(main_tree_data);
 			// hideSecondaryStories();
 			tags = VMM.Util.deDupeArray(tags);
 			config.tagSortFunction(tags);
