@@ -1,5 +1,7 @@
 
 var job_id;
+// var server_url = 'http://localhost/test/';
+var server_url = 'http://citest.troplat.ir/';
 
 var loadingImage = function(status) {
 	if(status == true && $('body .loading')) {
@@ -17,11 +19,12 @@ $('body').on('click', '#search', function(e) {
 	var query_word = $('#query-form input#queryWord').val();
 	var begin_date;
 	var end_date;
-	console.log('query is: ' + query_word)
+	console.log('query is: ' + query_word + ' from "' + begin_date + '"" to "' + end_date + '".');
+	/*
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
-		url: 'http://localhost/test/story/submit_query',
+		url: server_url + 'story/submit_query',
 		data: {
 			query_word: query_word,
 			begin_date: begin_date,
@@ -34,16 +37,18 @@ $('body').on('click', '#search', function(e) {
 		success: function(data) {
 			job_id = data.job_id;
 			checkProgress();
-			// loadingImage(false);
 		},
 	});
+	*/
+	checkProgress();
 });
 
 var retrieveData = function() {
+	/*
 	$.ajax({
 		type: 'POST',
 		dataType: 'json',
-		url: 'http://localhost/test/story/get_data',
+		url: server_url + 'story/get_data',
 		data: {
 			job_id: job_id
 		},
@@ -58,8 +63,27 @@ var retrieveData = function() {
 			$('body .container').hide();
 			runningStoryline();
 			$('#timeline-embed').show();
-			// $('#timeline-embed').hide();
-			// $('#tree-chart').show();
+			loadingImage(false);
+		},
+	});
+	*/
+	$.ajax({
+		type: 'GET',
+		dataType: 'json',
+		url: 'story15.json',
+		data: {
+		},
+		error: function() {
+			alert('Error occurred at retrieving data!!!');
+			retrieveData();
+		},
+		success: function(result) {
+			console.log('Data retrieved.');
+			console.log(result);
+			timeline_config.source = result;
+			$('body .container').hide();
+			runningStoryline();
+			$('#timeline-embed').show();
 			loadingImage(false);
 		},
 	});
@@ -69,11 +93,13 @@ var checkProgress = function() {
 	var progress = parseInt($('div.loading div.progress-bar').attr('aria-valuenow'));
 	setTimeout(function() {
 		progress = $('div.loading div.progress-bar').attr('aria-valuenow');
+		progress = parseInt(progress);
 		console.log('Progress is at: ' + progress + ' percent.');
+		/*
 		$.ajax({
 			type: 'POST',
 			dataType: 'json',
-			url: 'http://localhost/test/story/check_progress',
+			url: server_url + 'story/check_progress',
 			data: {
 				job_id: job_id,
 				progress: progress
@@ -95,24 +121,15 @@ var checkProgress = function() {
 				}
 			},
 		});
+		*/
+		progress += 20;
+		$('div.loading div.progress-bar').attr('aria-valuenow', progress);
+		$('div.loading div.progress-bar').attr('style', 'width: ' + progress + '%;');
+		$('div.loading div.progress-bar').html(progress + '%');
+		if(parseInt(progress) < 100) {
+			checkProgress();
+		} else {
+			retrieveData();
+		}
 	}, 1000);
 };
-
-// $.ajax({
-// 	type: 'GET',
-// 	// dataType: 'json',
-// 	url: 'http://www.tsetmc.com/tsev2/data/search.aspx?skey=%D8%AA%DA%A9%D9%85%D8%A8%D8%A7',
-// 	headers: {
-// 		'Origin': 'http://www.tsetmc.com',
-// 		'Referer': 'http://www.tsetmc.com'
-// 	},
-// 	error: function() {
-// 		alert('Error occurred at progress check!!!');
-// 		if(progress < 100) {
-// 			checkProgress();
-// 		}
-// 	},
-// 	success: function(data) {
-// 		console.log(data);
-// 	},
-// });
