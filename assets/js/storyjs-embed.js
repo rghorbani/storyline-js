@@ -389,7 +389,8 @@ function createStoryJS(c, src) {
         path.locale = path.locale + storyjs_e_config.lang + ".js?" + js_version
     }
     createEmbedDiv();
-    LoadLib.css(storyjs_e_config.css, onloaded_css);
+    // LoadLib.css(storyjs_e_config.css, onloaded_css);
+    onloaded_css();
     if (storyjs_e_config.font == "default") {
         ready.font.js = true;
         ready.font.css = true
@@ -446,7 +447,8 @@ function createStoryJS(c, src) {
     }
 
     function onloaded_jquery() {
-        LoadLib.js(storyjs_e_config.js, onloaded_js)
+        // LoadLib.js(storyjs_e_config.js, onloaded_js);
+        onloaded_js();
     }
 
     function onloaded_js() {

@@ -4312,6 +4312,95 @@ if (typeof VMM != "undefined" && typeof VMM.Slider == "undefined") {
 	}
 }
 if (typeof VMM.Slider != "undefined") {
+	VMM.Slider.goToSlide = function(n, ease, duration, fast, firstrun) {
+		var _ease = config.ease,
+			_duration = config.duration,
+			is_last = false,
+			is_first = false,
+			_title = "",
+			_pos;
+		VMM.ExternalAPI.youtube.stopPlayers();
+		current_slide = n;
+		_pos = slides[current_slide].leftpos();
+		if (current_slide == 0) {
+			is_first = true
+		}
+		if (current_slide + 1 >= slides.length) {
+			is_last = true
+		}
+		if (ease != null && ease != "") {
+			_ease = ease
+		}
+		if (duration != null && duration != "") {
+			_duration = duration
+		}
+		if (VMM.Browser.device == "mobile") {
+			VMM.Lib.visible(navigation.prevBtn, false);
+			VMM.Lib.visible(navigation.nextBtn, false)
+		} else {
+			if (is_first) {
+				VMM.Lib.visible(navigation.prevBtn, false)
+			} else {
+				VMM.Lib.visible(navigation.prevBtn, true);
+				_title = VMM.Util.unlinkify(data[current_slide - 1].title);
+				if (config.type == "timeline") {
+					if (typeof data[current_slide - 1].date === "undefined") {
+						VMM.attachElement(navigation.prevDate, _title);
+						VMM.attachElement(navigation.prevTitle, "")
+					} else {
+						VMM.attachElement(navigation.prevDate, VMM.Date.prettyDate(data[current_slide - 1].startdate, false, data[current_slide - 1].precisiondate));
+						VMM.attachElement(navigation.prevTitle, _title)
+					}
+				} else {
+					VMM.attachElement(navigation.prevTitle, _title)
+				}
+			}
+			if (is_last) {
+				VMM.Lib.visible(navigation.nextBtn, false)
+			} else {
+				VMM.Lib.visible(navigation.nextBtn, true);
+				_title = VMM.Util.unlinkify(data[current_slide + 1].title);
+				if (config.type == "timeline") {
+					if (typeof data[current_slide + 1].date === "undefined") {
+						VMM.attachElement(navigation.nextDate, _title);
+						VMM.attachElement(navigation.nextTitle, "")
+					} else {
+						VMM.attachElement(navigation.nextDate, VMM.Date.prettyDate(data[current_slide + 1].startdate, false, data[current_slide + 1].precisiondate));
+						VMM.attachElement(navigation.nextTitle, _title)
+					}
+				} else {
+					VMM.attachElement(navigation.nextTitle, _title)
+				}
+			}
+		}
+		if (fast) {
+			VMM.Lib.css($slider_container, "left", -(_pos - config.slider.content.padding))
+		} else {
+			VMM.Lib.stop($slider_container);
+			VMM.Lib.animate($slider_container, _duration, _ease, {
+				left: -(_pos - config.slider.content.padding)
+			})
+		}
+		if (firstrun) {
+			VMM.fireEvent(layout, "LOADED")
+		}
+		if (slides[current_slide].height() > config.slider_height) {
+			VMM.Lib.css(".slider", "overflow-y", "scroll")
+		} else {
+			VMM.Lib.css(layout, "overflow-y", "hidden");
+			var scroll_height = 0;
+			try {
+				scroll_height = VMM.Lib.prop(layout, "scrollHeight");
+				VMM.Lib.animate(layout, _duration, _ease, {
+					scrollTop: scroll_height - VMM.Lib.height(layout)
+				})
+			} catch (err) {
+				scroll_height = VMM.Lib.height(layout)
+			}
+		}
+		preloadSlides();
+		VMM.fireEvent($slider, "MESSAGE", "TEST")
+	}
 	VMM.Slider.Slide = function(d, _parent) {
 		var $media, $text, $slide, $wrap, element, c, data = d,
 			slide = {},

@@ -909,7 +909,8 @@ only screen and (min-device-pixel-ratio: 2) {
 }
 .vco-slider .slider-item .content {
     display: table-cell;
-    vertical-align: middle
+    vertical-align: middle;
+    padding-top: 20px;
 }
 .vco-slider .slider-item .content .pad-top .text .container {
     padding-top: 15px
@@ -938,7 +939,7 @@ only screen and (min-device-pixel-ratio: 2) {
 .vco-slider .slider-item .content .content-container .text .container {
     display: table-cell;
     vertical-align: middle;
-    text-align: left
+    text-align: right;
 }
 .vco-slider .slider-item .content .content-container .text .container p {
     -webkit-hyphens: auto;
