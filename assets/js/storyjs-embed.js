@@ -245,8 +245,8 @@ function createChart(json_data) {
         var chart = d3.chart.architectureTree();
         chart.diameter(600).data(json_data);
         d3.select('#tree-chart').call(chart);
-        console.log('chart done.');
-    }, 2000);
+        // console.log('chart done.');
+    }, 1000);
 }
 
 function createStoryJS(c, src) {

@@ -1296,7 +1296,8 @@ only screen and (min-device-pixel-ratio: 2) {
     vertical-align: middle;
     padding: 0;
     width: 90%;
-    text-align: left;
+    /*text-align: left;*/
+    text-align: right;
     margin-left: auto;
     margin-right: auto
 }

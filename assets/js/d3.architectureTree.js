@@ -21,7 +21,7 @@ d3.chart.architectureTree = function() {
                 .attr("width", diameter)
                 .attr("height", diameter)
                 .append("g")
-                .attr("transform", "translate(" + diameter / 4 + "," + diameter / 4 + ")");
+                .attr("transform", "translate(" + diameter / 3 + "," + diameter / 3 + ")");
         }
 
         var nodes = tree.nodes(treeData),

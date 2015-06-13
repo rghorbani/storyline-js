@@ -4604,6 +4604,19 @@ if (typeof VMM.Slider != "undefined") {
 				$text = VMM.appendAndGetElement($slide, "<div>", "text", VMM.TextElement.create(c.text))
 			}
 			if (data.needs_slug) {}
+			// finding a tag in text
+			if(data.asset.primary != "true") {
+				var dd = data.text;
+				regex = /href=['"](\S+?)['"]/;
+				group = dd.match(regex);
+				if (group) {
+					console.log(group);
+					data.asset.media = "<iframe src='" + group[1] + "'></iframe>";
+				} else {
+					data.asset.media = "";
+				}
+			}
+			//
 			if (data.asset != null && data.asset != "") {
 				if (data.asset.media != null && data.asset.media != "") {
 					c.has.media = true;
@@ -5100,6 +5113,7 @@ if (typeof VMM != "undefined" && typeof VMM.Timeline == "undefined") {
 			timeline_id = "#timelinejs",
 			events = {},
 			data = {},
+			tree_data = {},
 			_dates = [],
 			config = {},
 			has_width = false,
@@ -5297,6 +5311,7 @@ if (typeof VMM != "undefined" && typeof VMM.Timeline == "undefined") {
 
 		function onDataReady(e, d) {
 			trace("onDataReady");
+			tree_data = d.tree;
 			data = d.timeline;
 			if (type.of(data.era) != "array") {
 				data.era = []
@@ -5483,7 +5498,7 @@ if (typeof VMM != "undefined" && typeof VMM.Timeline == "undefined") {
 				VMM.bindEvent($slider, onSlideUpdate, "UPDATE");
 				VMM.bindEvent($navigation, onMarkerUpdate, "UPDATE");
 				slider.init(_dates);
-				timenav.init(_dates, data.era);
+				timenav.init(_dates, data.era, tree_data);
 				VMM.bindEvent(global, reSize, config.events.resize)
 			}
 		}
@@ -5614,6 +5629,7 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
 			timespan = {},
 			layout = parent,
 			data = [],
+			tree_data = {},
 			era_markers = [],
 			markers = [],
 			interval_array = [],
@@ -5724,19 +5740,20 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
 		if (content_height != null && content_height != "") {
 			config.nav.height = content_height
 		}
-		this.init = function(d, e) {
+		this.init = function(d, e, t) {
 			trace("VMM.Timeline.TimeNav init");
 			if (typeof d != "undefined") {
-				this.setData(d, e)
+				this.setData(d, e, t)
 			} else {
 				trace("WAITING ON DATA")
 			}
 		};
-		this.setData = function(d, e) {
+		this.setData = function(d, e, t) {
 			if (typeof d != "undefined") {
 				data = {};
 				data = d;
 				eras = e;
+				tree_data = t;
 				build()
 			} else {
 				trace("NO DATA")
@@ -5932,7 +5949,7 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
 		function markParents(n) {
 			current_marker = n;
 			var par = markers[current_marker].parent_id;
-			console.log("First parent is: " + par);
+			// console.log("First parent is: " + par);
 			markParent(par);
 			// for(var i = 0; i < markers.length; i++) {
 			// 	if (markers[i].parent_id.indexOf(markers[current_marker].parent_id) != -1) {
@@ -6915,10 +6932,10 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
 				markers.push(_marker_obj)
 			}
 			// building tree json
-			console.log(markers);
-			var tree_data = {};
-			tree_data.name = 'Root';
-			tree_data.children = findChildren("0");
+			// console.log(markers);
+			// var tree_data = {};
+			// tree_data.name = 'Root';
+			// tree_data.children = findChildren("0");
 			main_tree_data = tree_data;
 			createChart(main_tree_data);
 			// hideSecondaryStories();
@@ -7104,7 +7121,7 @@ if (typeof VMM.Timeline !== "undefined" && typeof VMM.Timeline.DataObj == "undef
 			trace("parseJSON");
 			if (d.timeline.type == "default") {
 				trace("DATA SOURCE: JSON STANDARD TIMELINE");
-				console.log("parseJSON");
+				// console.log("parseJSON");
 				VMM.fireEvent(global, VMM.Timeline.Config.events.data_ready, d)
 			} else if (d.timeline.type == "story") {
 				trace("DATA SOURCE: JSON Story TIMELINE");
