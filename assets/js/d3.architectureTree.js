@@ -70,9 +70,9 @@ d3.chart.architectureTree = function() {
                     return;
                 }
                 fade(0.1)(d);
-                document.querySelector('#panel').dispatchEvent(
-                    new CustomEvent("hoverNode", { "detail": d.name })
-                );
+                // document.querySelector('#panel').dispatchEvent(
+                //     new CustomEvent("hoverNode", { "detail": d.name })
+                // );
             })
             .on('mouseout', function(d) {
                 if(activeNode !== null) {
@@ -255,12 +255,14 @@ d3.chart.architectureTree = function() {
                 if (d.name === name) return true;
             })
             .each(function(d) {
-                document.querySelector('#panel').dispatchEvent(
-                    new CustomEvent("selectNode", { "detail": d.name })
-                );
+                // document.querySelector('#panel').dispatchEvent(
+                //     new CustomEvent("selectNode", { "detail": d.name })
+                // );
                 d3.select(this).attr("id", "node-active");
                 activeNode = d;
                 fade(0.1)(d);
+                main_timeline.goToEventOut(d.id);
+                unselect();
             });
     };
 

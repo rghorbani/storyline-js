@@ -3,19 +3,12 @@ var job_id;
 // var server_url = 'http://localhost/test/';
 var server_url = 'http://citest.troplat.ir/';
 
-var loadingImage = function(status) {
-	if(status == true && $('body .loading')) {
-		$('body').append('<div class="loading"><div class="prog col-xs-6 col-xs-offset-3"><div class="progress"><div class="progress-bar progress-bar-success progress-bar-striped active" role="progressbar" aria-valuenow="0" aria-valuemin="0" aria-valuemax="100" style="width: 0%;">0%</div></div></div></div>');
-		// $('body').addClass('dim');
-	} else {
-		$('body .loading').remove();
-		// $('body').removeClass('dim');
-	}
-};
-
 $('body').on('click', '#search', function(e) {
 	e.preventDefault();
-	loadingImage(true);
+	$('.loading-modal').modal({
+		keyboard: false,
+		backdrop: 'static'
+	});
 	var query_word = $('#query-form input#queryWord').val();
 	var begin_date;
 	var end_date;
@@ -32,7 +25,7 @@ $('body').on('click', '#search', function(e) {
 		},
 		error: function() {
 			alert('Error occurred at job submitting check!!!');
-			loadingImage(false);
+			$('.loading-modal').modal('hide');
 		},
 		success: function(data) {
 			job_id = data.job_id;
@@ -63,7 +56,7 @@ var retrieveData = function() {
 			$('body .container').hide();
 			runningStoryline();
 			$('#timeline-embed').show();
-			loadingImage(false);
+			$('.loading-modal').modal('hide');
 		},
 	});
 	*/
@@ -84,7 +77,7 @@ var retrieveData = function() {
 			$('body .container').hide();
 			runningStoryline();
 			$('#timeline-embed').show();
-			loadingImage(false);
+			$('.loading-modal').modal('hide');
 		},
 	});
 };
@@ -92,7 +85,7 @@ var retrieveData = function() {
 var checkProgress = function() {
 	var progress = parseInt($('div.loading div.progress-bar').attr('aria-valuenow'));
 	setTimeout(function() {
-		progress = $('div.loading div.progress-bar').attr('aria-valuenow');
+		progress = $('#timeline-loading').attr('aria-valuenow');
 		progress = parseInt(progress);
 		console.log('Progress is at: ' + progress + ' percent.');
 		/*
@@ -111,9 +104,9 @@ var checkProgress = function() {
 				}
 			},
 			success: function(data) {
-				$('div.loading div.progress-bar').attr('aria-valuenow', data.progress);
-				$('div.loading div.progress-bar').attr('style', 'width: ' + data.progress + '%;');
-				$('div.loading div.progress-bar').html(data.progress + '%');
+				$('#timeline-loading').attr('aria-valuenow', data.progress);
+				$('#timeline-loading').attr('style', 'width: ' + data.progress + '%;');
+				$('#timeline-loading').html(data.progress + '%');
 				if(parseInt(data.progress) < 100) {
 					checkProgress();
 				} else {
@@ -123,9 +116,9 @@ var checkProgress = function() {
 		});
 		*/
 		progress += 20;
-		$('div.loading div.progress-bar').attr('aria-valuenow', progress);
-		$('div.loading div.progress-bar').attr('style', 'width: ' + progress + '%;');
-		$('div.loading div.progress-bar').html(progress + '%');
+		$('#timeline-loading').attr('aria-valuenow', progress);
+		$('#timeline-loading').attr('style', 'width: ' + progress + '%;');
+		$('#timeline-loading').html(progress + '%');
 		if(parseInt(progress) < 100) {
 			checkProgress();
 		} else {

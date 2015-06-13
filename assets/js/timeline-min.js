@@ -4280,7 +4280,7 @@ if (typeof VMM != "undefined" && typeof VMM.Slider == "undefined") {
 			navigation.prevTitle = VMM.appendAndGetElement(navigation.prevBtnContainer, "<div>", "title", "");
 			VMM.bindEvent(".nav-next", onNextClick);
 			VMM.bindEvent(".nav-previous", onPrevClick);
-			VMM.bindEvent(window, onKeypressNav, "keydown")
+			VMM.bindEvent(window, onKeypressNav, "keydown");
 		}
 
 		function build() {
@@ -4307,100 +4307,11 @@ if (typeof VMM != "undefined" && typeof VMM.Slider == "undefined") {
 			reSize(false, true);
 			VMM.Lib.visible(navigation.prevBtn, false);
 			goToSlide(config.current_slide, "easeOutExpo", __duration, true, true);
-			_active = true
+			_active = true;
 		}
 	}
 }
 if (typeof VMM.Slider != "undefined") {
-	VMM.Slider.goToSlide = function(n, ease, duration, fast, firstrun) {
-		var _ease = config.ease,
-			_duration = config.duration,
-			is_last = false,
-			is_first = false,
-			_title = "",
-			_pos;
-		VMM.ExternalAPI.youtube.stopPlayers();
-		current_slide = n;
-		_pos = slides[current_slide].leftpos();
-		if (current_slide == 0) {
-			is_first = true
-		}
-		if (current_slide + 1 >= slides.length) {
-			is_last = true
-		}
-		if (ease != null && ease != "") {
-			_ease = ease
-		}
-		if (duration != null && duration != "") {
-			_duration = duration
-		}
-		if (VMM.Browser.device == "mobile") {
-			VMM.Lib.visible(navigation.prevBtn, false);
-			VMM.Lib.visible(navigation.nextBtn, false)
-		} else {
-			if (is_first) {
-				VMM.Lib.visible(navigation.prevBtn, false)
-			} else {
-				VMM.Lib.visible(navigation.prevBtn, true);
-				_title = VMM.Util.unlinkify(data[current_slide - 1].title);
-				if (config.type == "timeline") {
-					if (typeof data[current_slide - 1].date === "undefined") {
-						VMM.attachElement(navigation.prevDate, _title);
-						VMM.attachElement(navigation.prevTitle, "")
-					} else {
-						VMM.attachElement(navigation.prevDate, VMM.Date.prettyDate(data[current_slide - 1].startdate, false, data[current_slide - 1].precisiondate));
-						VMM.attachElement(navigation.prevTitle, _title)
-					}
-				} else {
-					VMM.attachElement(navigation.prevTitle, _title)
-				}
-			}
-			if (is_last) {
-				VMM.Lib.visible(navigation.nextBtn, false)
-			} else {
-				VMM.Lib.visible(navigation.nextBtn, true);
-				_title = VMM.Util.unlinkify(data[current_slide + 1].title);
-				if (config.type == "timeline") {
-					if (typeof data[current_slide + 1].date === "undefined") {
-						VMM.attachElement(navigation.nextDate, _title);
-						VMM.attachElement(navigation.nextTitle, "")
-					} else {
-						VMM.attachElement(navigation.nextDate, VMM.Date.prettyDate(data[current_slide + 1].startdate, false, data[current_slide + 1].precisiondate));
-						VMM.attachElement(navigation.nextTitle, _title)
-					}
-				} else {
-					VMM.attachElement(navigation.nextTitle, _title)
-				}
-			}
-		}
-		if (fast) {
-			VMM.Lib.css($slider_container, "left", -(_pos - config.slider.content.padding))
-		} else {
-			VMM.Lib.stop($slider_container);
-			VMM.Lib.animate($slider_container, _duration, _ease, {
-				left: -(_pos - config.slider.content.padding)
-			})
-		}
-		if (firstrun) {
-			VMM.fireEvent(layout, "LOADED")
-		}
-		if (slides[current_slide].height() > config.slider_height) {
-			VMM.Lib.css(".slider", "overflow-y", "scroll")
-		} else {
-			VMM.Lib.css(layout, "overflow-y", "hidden");
-			var scroll_height = 0;
-			try {
-				scroll_height = VMM.Lib.prop(layout, "scrollHeight");
-				VMM.Lib.animate(layout, _duration, _ease, {
-					scrollTop: scroll_height - VMM.Lib.height(layout)
-				})
-			} catch (err) {
-				scroll_height = VMM.Lib.height(layout)
-			}
-		}
-		preloadSlides();
-		VMM.fireEvent($slider, "MESSAGE", "TEST")
-	}
 	VMM.Slider.Slide = function(d, _parent) {
 		var $media, $text, $slide, $wrap, element, c, data = d,
 			slide = {},
@@ -4610,7 +4521,7 @@ if (typeof VMM.Slider != "undefined") {
 				regex = /href=['"](\S+?)['"]/;
 				group = dd.match(regex);
 				if (group) {
-					console.log(group);
+					// console.log(group);
 					data.asset.media = "<iframe src='" + group[1] + "'></iframe>";
 				} else {
 					data.asset.media = "";
@@ -5371,6 +5282,20 @@ if (typeof VMM != "undefined" && typeof VMM.Timeline == "undefined") {
 			}
 		}
 
+		this.goToEventOut = function(id) {
+			var n = 0;
+			markers = VMM.Timeline.TimeNav.markers;
+			for (var i = 0; i < markers.length - 1; i++) {
+				if(parseInt(markers[i].self_id) == parseInt(id))
+					n = i;
+			};
+			if (n <= _dates.length - 1 && n >= 0) {
+				config.current_slide = n;
+				slider.setSlide(config.current_slide);
+				timenav.setMarker(config.current_slide, config.ease, config.duration)
+			}
+		}
+
 		function setHash(n) {
 			if (config.hash_bookmark) {
 				window.location.hash = "#" + n.toString()
@@ -5619,7 +5544,7 @@ if (typeof VMM != "undefined" && typeof VMM.Timeline == "undefined") {
 			onDatesProcessed()
 		}
 	};
-	VMM.Timeline.Config = {}
+	VMM.Timeline.Config = {};
 }
 if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefined") {
 	VMM.Timeline.TimeNav = function(parent, content_width, content_height) {
@@ -6936,6 +6861,7 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
 			// var tree_data = {};
 			// tree_data.name = 'Root';
 			// tree_data.children = findChildren("0");
+			VMM.Timeline.TimeNav.markers = markers;
 			main_tree_data = tree_data;
 			createChart(main_tree_data);
 			// hideSecondaryStories();
@@ -7002,7 +6928,8 @@ if (typeof VMM.Timeline != "undefined" && typeof VMM.Timeline.TimeNav == "undefi
 				era_markers.push(era)
 			}
 		}
-	}
+	};
+	VMM.Timeline.TimeNav.markers = [];
 }
 if (typeof VMM.Timeline !== "undefined" && typeof VMM.Timeline.DataObj == "undefined") {
 	VMM.Timeline.DataObj = {
