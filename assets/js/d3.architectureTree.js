@@ -12,16 +12,16 @@ d3.chart.architectureTree = function() {
     function chart(){
         if (typeof(tree) === 'undefined') {
             tree = d3.layout.tree()
-                .size([360, diameter / 2 - 120])
+                .size([360, diameter / 1.2])
                 .separation(function(a, b) { return (a.parent == b.parent ? 1 : 2) / a.depth; });
 
             $(".slider-item-container .slider-item:first-child .media").html('');
             // svg = d3.select("#graph").append("svg")
             svg = d3.select(".slider-item-container .slider-item:first-child .media").append("svg")
-                .attr("width", diameter)
+                .attr("width", diameter * 1.2)
                 .attr("height", diameter)
                 .append("g")
-                .attr("transform", "translate(" + diameter / 3 + "," + diameter / 3 + ")");
+                .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
         }
 
         var nodes = tree.nodes(treeData),

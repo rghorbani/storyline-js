@@ -404,7 +404,8 @@ function createStoryJS(c, src) {
             path.font.name = storyjs_e_config.font;
             path.font.css = path.font.css + storyjs_e_config.font + ".css?" + js_version
         }
-        LoadLib.css(path.font.css, onloaded_font_css);
+        // LoadLib.css(path.font.css, onloaded_font_css);
+        onloaded_font_css();
         for (var i = 0; i < font_presets.length; i++) {
             if (path.font.name == font_presets[i].name) {
                 path.font.google = true;

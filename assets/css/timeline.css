@@ -219,7 +219,7 @@
     vertical-align: top
 }
 .vco-storyjs {
-    font-family: "Georgia", Times New Roman, Times, serif
+    font-family: 'StorylineFont', "Georgia", Times New Roman, Times, serif
 }
 .vco-storyjs .twitter,
 .vco-storyjs .vcard,
@@ -232,7 +232,7 @@
 .vco-storyjs .time-interval div,
 .vco-storyjs .time-interval-major div,
 .vco-storyjs .nav-container {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important
+    font-family: 'StorylineFont', "Helvetica Neue", Helvetica, Arial, sans-serif !important
 }
 .vco-storyjs h1.date,
 .vco-storyjs h2.date,
@@ -240,7 +240,7 @@
 .vco-storyjs h4.date,
 .vco-storyjs h5.date,
 .vco-storyjs h6.date {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important
+    font-family: 'StorylineFont', "Helvetica Neue", Helvetica, Arial, sans-serif !important
 }
 .vco-storyjs .timenav h1,
 .vco-storyjs .flag-content h1,
@@ -260,13 +260,13 @@
 .vco-storyjs .timenav h6,
 .vco-storyjs .flag-content h6,
 .vco-storyjs .era h6 {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif !important
+    font-family: 'StorylineFont', "Helvetica Neue", Helvetica, Arial, sans-serif !important
 }
 .vco-storyjs p,
 .vco-storyjs blockquote,
 .vco-storyjs blockquote p,
 .vco-storyjs .twitter blockquote p {
-    font-family: "Georgia", Times New Roman, Times, serif !important
+    font-family: 'StorylineFont', "Georgia", Times New Roman, Times, serif !important
 }
 .vco-storyjs .vco-feature h1,
 .vco-storyjs .vco-feature h2,
@@ -274,10 +274,10 @@
 .vco-storyjs .vco-feature h4,
 .vco-storyjs .vco-feature h5,
 .vco-storyjs .vco-feature h6 {
-    font-family: "Georgia", Times New Roman, Times, serif
+    font-family: 'StorylineFont', "Georgia", Times New Roman, Times, serif
 }
 .timeline-tooltip {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif
+    font-family: 'StorylineFont', "Helvetica Neue", Helvetica, Arial, sans-serif
 }
 .vco-storyjs {
     font-size: 15px;
@@ -973,6 +973,13 @@ only screen and (min-device-pixel-ratio: 2) {
     min-width: 50%;
     float: left
 }
+
+.vco-slider .slider-item:first-child .content .content-container .media {
+    min-width: 80%;
+    /*overflow-x: visible;*/
+    /*width: 70%;*/
+}
+
 .vco-slider .slider-item .content .content-container .media .media-wrapper {
     display: inline-block;
     margin-left: auto;
@@ -2103,7 +2110,7 @@ only screen and (min-device-pixel-ratio: 2) {
     padding-bottom: -2px;
 }
 .vco-timeline .vco-navigation .timenav .content .marker.active-story .flag .flag-content {
-    background-color: orange;
+    background-color: #3C7DC4;
     border-radius: 5px;
     margin-right: 3px;
 }
@@ -2182,6 +2189,10 @@ only screen and (min-device-pixel-ratio: 2) {
     line-height: 11px;
     color: #999;
     margin-bottom: 2px
+}
+.vco-timeline .vco-navigation .timenav .content .marker.active-story .flag .flag-content h3,
+.vco-timeline .vco-navigation .timenav .content .marker.active-story .flag-small .flag-content h3 {
+    color: white;
 }
 .vco-timeline .vco-navigation .timenav .content .marker .flag .flag-content h3 small,
 .vco-timeline .vco-navigation .timenav .content .marker .flag-small .flag-content h3 small {

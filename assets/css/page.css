@@ -33,3 +33,7 @@ form button.blue:hover {
 	background-color: #001f3f;
 	color: #fff;
 }
+
+.vco-slider .slider-item:first-child .content .content-container .media svg {
+    overflow: scroll;
+}
