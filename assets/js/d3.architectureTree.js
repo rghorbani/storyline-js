@@ -20,6 +20,7 @@ d3.chart.architectureTree = function() {
             svg = d3.select(".slider-item-container .slider-item:first-child .media").append("svg")
                 .attr("width", diameter * 1.2)
                 .attr("height", diameter)
+                .call(zoomListener)
                 .append("g")
                 .attr("transform", "translate(" + diameter / 2 + "," + diameter / 2 + ")");
         }
@@ -31,6 +32,16 @@ d3.chart.architectureTree = function() {
 
         svg.call(updateData, nodes, links);
     }
+
+    // Define the zoom function for the zoomable tree
+
+    function zoom() {
+        svg.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
+    }
+
+
+    // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
+    var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 
     /**
      * Update the chart data
