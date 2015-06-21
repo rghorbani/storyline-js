@@ -63,7 +63,7 @@ var retrieveData = function() {
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: 'story10.json',
+		url: 'story5.json',
 		data: {
 		},
 		error: function() {

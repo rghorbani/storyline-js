@@ -243,7 +243,7 @@ var runningStoryline = function() {
 function createChart(json_data) {
     setTimeout(function() {
         var chart = d3.chart.architectureTree();
-        chart.diameter(600).data(json_data);
+        chart.diameter(720).data(json_data);
         d3.select('#tree-chart').call(chart);
         // console.log('chart done.');
     }, 1000);

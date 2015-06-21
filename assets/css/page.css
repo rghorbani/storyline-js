@@ -30,10 +30,16 @@ form button.blue {
 	#001f3f
 }
 form button.blue:hover {
-	background-color: #001f3f;
+	background-color: #20486d;
 	color: #fff;
 }
 
+.vco-slider .slider-item:first-child .content .content-container .media {
+	/*max-height: 70%;*/
+	/*height: 100%;*/
+}
+.vco-slider .slider-item:first-child .content .content-container .media,
 .vco-slider .slider-item:first-child .content .content-container .media svg {
-    overflow: scroll;
+    /*overflow: auto;*/
+    /*overflow-x: auto;*/
 }
