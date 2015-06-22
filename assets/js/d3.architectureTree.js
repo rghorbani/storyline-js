@@ -282,9 +282,6 @@ d3.chart.architectureTree = function() {
         fade(1)(activeNode);
         d3.select('#node-active').attr("id", null);
         activeNode = null;
-        document.querySelector('#panel').dispatchEvent(
-            new CustomEvent("unSelectNode")
-        );
     };
 
     chart.select = select;
