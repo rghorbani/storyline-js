@@ -602,7 +602,7 @@ function createChart(json_data) {
                     }
                 };
                 childCount(0, root);
-                var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line  
+                var newHeight = d3.max(levelWidth) * 60; // 50 pixels per line  
                 tree = tree.size([newHeight, viewerWidth]);
 
                 // Compute the new tree layout.
@@ -611,7 +611,7 @@ function createChart(json_data) {
 
                 // Set widths between levels based on maxLabelLength.
                 nodes.forEach(function(d) {
-                    d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
+                    d.y = (d.depth * (maxLabelLength * 5)); //maxLabelLength * 10px
                     // alternatively to keep a fixed scale one can set a fixed depth per level
                     // Normalize for fixed-depth by commenting out below line
                     // d.y = (d.depth * 500); //500px per level.
@@ -625,19 +625,23 @@ function createChart(json_data) {
 
                 // Enter any new nodes at the parent's previous position.
                 var nodeEnter = node.enter().append("g")
-                    .call(dragListener)
+                    // .call(dragListener)
                     .attr("class", "node")
                     .attr("transform", function(d) {
                         return "translate(" + source.y0 + "," + source.x0 + ")";
-                    })
-                    .on('click', click);
+                    });
+                    // .on('click', function(d) {
+                    //     main_timeline.goToEventOut(d.id);
+                    // });
+                    
 
                 nodeEnter.append("circle")
                     .attr('class', 'nodeCircle')
                     .attr("r", 0)
                     .style("fill", function(d) {
                         return d._children ? "lightsteelblue" : "#fff";
-                    });
+                    })
+                    .on('click', click);
 
                 nodeEnter.append("text")
                     .attr("x", function(d) {
@@ -651,7 +655,10 @@ function createChart(json_data) {
                     .text(function(d) {
                         return d.name;
                     })
-                    .style("fill-opacity", 0);
+                    .style("fill-opacity", 0)
+                    .on('click', function(d) {
+                        main_timeline.goToEventOut(d.id);
+                    });
 
                 // phantom node to give us mouseover in a radius around it
                 nodeEnter.append("circle")
