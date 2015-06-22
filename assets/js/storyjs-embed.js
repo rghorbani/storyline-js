@@ -267,7 +267,7 @@ function createChart(json_data) {
             // size of the diagram
             $(".slider-item-container .slider-item:first-child .media").html('');
             var viewerWidth = $('.slider-item-container .slider-item:first-child .media').width();
-            var viewerHeight = $('.slider-item-container .slider-item:first-child').height();
+            var viewerHeight = $('.slider-item-container .slider-item:first-child').height() - 20;
 
             var tree = d3.layout.tree()
                 .size([viewerHeight, viewerWidth]);
@@ -1090,11 +1090,11 @@ $(document.body).on('click', '.content .text a', function(e) {
     $(frame).attr('src', link);
 });
 
-$(window).on('hashchange', function(e) {
-    e.preventDefault();
-    alert('bye');
-});
+// $(window).on('hashchange', function(e) {
+//     e.preventDefault();
+//     alert('bye');
+// });
 
-window.onbeforeunload = function() {
-    return 'Are you sure you want to leave?';
-}
+// window.onbeforeunload = function() {
+//     return 'Are you sure you want to leave?';
+// }
