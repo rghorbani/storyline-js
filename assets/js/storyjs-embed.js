@@ -1089,3 +1089,12 @@ $(document.body).on('click', '.content .text a', function(e) {
     var frame = $(this).closest('.content').find('.media .media-frame');
     $(frame).attr('src', link);
 });
+
+$(window).on('hashchange', function(e) {
+    e.preventDefault();
+    alert('bye');
+});
+
+window.onbeforeunload = function() {
+    return 'Are you sure you want to leave?';
+}

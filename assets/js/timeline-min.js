@@ -4523,6 +4523,8 @@ if (typeof VMM.Slider != "undefined") {
 				if (group) {
 					// console.log(group);
 					data.asset.media = "<iframe src='" + group[1] + "'></iframe>";
+					data.asset.credit = "\u003ca href\u003d\u0027http://www.rghorbani.ir\u0027\u003eReza Ghorbani Farid\u003c/a\u003e";
+					data.asset.caption = "Developed by Reza Ghorbani.";
 				} else {
 					data.asset.media = "";
 				}
