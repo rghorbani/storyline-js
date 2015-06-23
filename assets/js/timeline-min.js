@@ -1,8 +1,5 @@
 /*
-	TimelineJS - ver. 2.35.5 - 2015-02-26
-	Copyright (c) 2012-2013 Northwestern University
-	a project of the Northwestern University Knight Lab, originally created by Zach Wise
-	https://github.com/NUKnightLab/TimelineJS
+	StorylineJS
 	This Source Code Form is subject to the terms of the Mozilla Public License, v. 2.0.
 	If a copy of the MPL was not distributed with this file, You can obtain one at http://mozilla.org/MPL/2.0/.
 */
@@ -4523,8 +4520,10 @@ if (typeof VMM.Slider != "undefined") {
 				if (group) {
 					// console.log(group);
 					data.asset.media = "<iframe src='" + group[1] + "'></iframe>";
-					data.asset.credit = "\u003ca href\u003d\u0027http://www.rghorbani.ir\u0027\u003eReza Ghorbani Farid\u003c/a\u003e";
-					data.asset.caption = "Developed by Reza Ghorbani.";
+					// data.asset.credit = "\u003ca href\u003d\u0027http://www.rghorbani.ir\u0027\u003eReza Ghorbani Farid\u003c/a\u003e";
+					// data.asset.caption = "Developed by Reza Ghorbani.";
+					data.asset.credit = ".";
+					data.asset.caption = ".";
 				} else {
 					data.asset.media = "";
 				}

@@ -2,8 +2,12 @@
 
 d3.chart = d3.chart || {};
 
-d3.chart.architectureTree = function() {
+d3.chart.expandingTree = function(json_data) {
 
+    treeData = json_data;
+    console.log(treeData);
+
+    // Calculate total nodes, max label length
     var totalNodes = 0;
     var maxLabelLength = 0;
     // variables for drag/drop
@@ -16,55 +20,20 @@ d3.chart.architectureTree = function() {
     var i = 0;
     var duration = 750;
     var root;
-    var tree;
-    var diagonal;
-    var treeData;
-    var baseSvg, svgGroup;
-    var diameter;
-    var viewerWidth, viewerHeight;
-    var domNode;
-    var nodes;
 
-    /**
-     * Build the chart
-     */
-    function chart() {
-        if (typeof(tree) === 'undefined') {
-            $(".slider-item-container .slider-item:first-child .media").html('');
-            viewerWidth = $(".slider-item-container .slider-item:first-child .media").width();
-            viewerHeight = $(".slider-item-container .slider-item:first-child").height();
-            tree = d3.layout.tree()
-                .size([viewerHeight, viewerWidth]);
+    // size of the diagram
+    $(".slider-item-container .slider-item:first-child .media").html('');
+    var viewerWidth = $('.slider-item-container .slider-item:first-child .media').width();
+    var viewerHeight = $('.slider-item-container .slider-item:first-child').height() - 20;
 
-            // define a d3 diagonal projection for use by the node paths later on.
-            diagonal = d3.svg.diagonal()
-                .projection(function(d) {
-                    return [d.y, d.x];
-                });
+    var tree = d3.layout.tree()
+        .size([viewerHeight, viewerWidth]);
 
-            // sortTree();
-
-            baseSvg = d3.select(".slider-item-container .slider-item:first-child .media").append("svg")
-                .attr("width", viewerWidth)
-                .attr("height", viewerHeight)
-                .attr("class", "overlay")
-                .call(zoomListener);
-
-            // Append a group which holds all nodes and which the zoom Listener can act upon.
-            svgGroup = baseSvg.append("g");
-
-        }
-
-        // Define the root
-        root = treeData;
-        root.x0 = viewerHeight / 2;
-        root.y0 = 0;
-
-        // Layout the tree initially and center on the root node.
-        update2(root);
-        // update(root);
-        // centerNode(root);
-    }
+    // define a d3 diagonal projection for use by the node paths later on.
+    var diagonal = d3.svg.diagonal()
+        .projection(function(d) {
+            return [d.y, d.x];
+        });
 
     // A recursive helper function for performing some setup by walking through all nodes
 
@@ -83,22 +52,27 @@ d3.chart.architectureTree = function() {
     }
 
     // Call visit function to establish maxLabelLength
-    // visit(treeData, function(d) {
-    //     totalNodes++;
-    //     maxLabelLength = Math.max(d.name.length, maxLabelLength);
+    visit(treeData, function(d) {
+        totalNodes++;
+        maxLabelLength = Math.max(d.name.length, maxLabelLength);
 
-    // }, function(d) {
-    //     return d.children && d.children.length > 0 ? d.children : null;
-    // });
+    }, function(d) {
+        return d.children && d.children.length > 0 ? d.children : null;
+    });
+
 
     // sort the tree according to the node names
+
     function sortTree() {
         tree.sort(function(a, b) {
             return b.name.toLowerCase() < a.name.toLowerCase() ? 1 : -1;
         });
     }
+    // Sort the tree initially incase the JSON isn't in a sorted order.
+    sortTree();
 
     // TODO: Pan function, can be better implemented.
+
     function pan(domNode, direction) {
         var speed = panSpeed;
         if (panTimer) {
@@ -125,16 +99,67 @@ d3.chart.architectureTree = function() {
     }
 
     // Define the zoom function for the zoomable tree
+
     function zoom() {
         svgGroup.attr("transform", "translate(" + d3.event.translate + ")scale(" + d3.event.scale + ")");
     }
 
+
     // define the zoomListener which calls the zoom function on the "zoom" event constrained within the scaleExtents
     var zoomListener = d3.behavior.zoom().scaleExtent([0.1, 3]).on("zoom", zoom);
 
+    function initiateDrag(d, domNode) {
+        draggingNode = d;
+        d3.select(domNode).select('.ghostCircle').attr('pointer-events', 'none');
+        d3.selectAll('.ghostCircle').attr('class', 'ghostCircle show');
+        d3.select(domNode).attr('class', 'node activeDrag');
+
+        svgGroup.selectAll("g.node").sort(function(a, b) { // select the parent and sort the path's
+            if (a.id != draggingNode.id) return 1; // a is not the hovered element, send "a" to the back
+            else return -1; // a is the hovered element, bring "a" to the front
+        });
+        // if nodes has children, remove the links and nodes
+        if (nodes.length > 1) {
+            // remove link paths
+            links = tree.links(nodes);
+            nodePaths = svgGroup.selectAll("path.link")
+                .data(links, function(d) {
+                    return d.target.id;
+                }).remove();
+            // remove child nodes
+            nodesExit = svgGroup.selectAll("g.node")
+                .data(nodes, function(d) {
+                    return d.id;
+                }).filter(function(d, i) {
+                    if (d.id == draggingNode.id) {
+                        return false;
+                    }
+                    return true;
+                }).remove();
+        }
+
+        // remove parent link
+        parentLink = tree.links(tree.nodes(draggingNode.parent));
+        svgGroup.selectAll('path.link').filter(function(d, i) {
+            if (d.target.id == draggingNode.id) {
+                return true;
+            }
+            return false;
+        }).remove();
+
+        dragStarted = null;
+    }
+
+    // define the baseSvg, attaching a class for styling and the zoomListener
+    var baseSvg = d3.select(".slider-item-container .slider-item:first-child .media").append("svg")
+        .attr("width", viewerWidth)
+        .attr("height", viewerHeight)
+        .attr("class", "overlay")
+        .call(zoomListener);
+
+
     // Define the drag listeners for drag/drop behaviour of nodes.
-    var dragStarted;
-    var dragListener = d3.behavior.drag()
+    dragListener = d3.behavior.drag()
         .on("dragstart", function(d) {
             if (d == root) {
                 return;
@@ -211,7 +236,7 @@ d3.chart.architectureTree = function() {
             }
         });
 
-    var endDrag = function() {
+    function endDrag() {
         selectedNode = null;
         d3.selectAll('.ghostCircle').attr('class', 'ghostCircle');
         d3.select(domNode).attr('class', 'node');
@@ -223,30 +248,30 @@ d3.chart.architectureTree = function() {
             centerNode(draggingNode);
             draggingNode = null;
         }
-    };
+    }
 
     // Helper functions for collapsing and expanding nodes.
-    var collapse = function(d) {
+
+    function collapse(d) {
         if (d.children) {
             d._children = d.children;
             d._children.forEach(collapse);
             d.children = null;
         }
-    };
+    }
 
-    var expand = function(d) {
+    function expand(d) {
         if (d._children) {
             d.children = d._children;
             d.children.forEach(expand);
             d._children = null;
         }
-    };
+    }
 
     var overCircle = function(d) {
         selectedNode = d;
         updateTempConnector();
     };
-
     var outCircle = function(d) {
         selectedNode = null;
         updateTempConnector();
@@ -281,10 +306,11 @@ d3.chart.architectureTree = function() {
     };
 
     // Function to center node when clicked/dropped so node doesn't get lost when collapsing/moving with large amount of children.
-    var centerNode = function(source) {
-        var scale = zoomListener.scale();
-        var x = -source.y0;
-        var y = -source.x0;
+
+    function centerNode(source) {
+        scale = zoomListener.scale();
+        x = -source.y0;
+        y = -source.x0;
         x = x * scale + viewerWidth / 2;
         y = y * scale + viewerHeight / 2;
         d3.select('g').transition()
@@ -292,10 +318,11 @@ d3.chart.architectureTree = function() {
             .attr("transform", "translate(" + x + "," + y + ")scale(" + scale + ")");
         zoomListener.scale(scale);
         zoomListener.translate([x, y]);
-    };
+    }
 
     // Toggle children function
-    var toggleChildren = function(d) {
+
+    function toggleChildren(d) {
         if (d.children) {
             d._children = d.children;
             d.children = null;
@@ -304,41 +331,18 @@ d3.chart.architectureTree = function() {
             d._children = null;
         }
         return d;
-    };
+    }
 
     // Toggle children on click.
-    var click = function(d) {
+
+    function click(d) {
         if (d3.event.defaultPrevented) return; // click suppressed
         d = toggleChildren(d);
         update(d);
         centerNode(d);
-    };
+    }
 
-    var update2 = function(source) {
-        var childCount = function(level, n) {
-
-            if (n.children && n.children.length > 0) {
-                if (levelWidth.length <= level + 1) levelWidth.push(0);
-
-                levelWidth[level + 1] += n.children.length;
-                n.children.forEach(function(d) {
-                    childCount(level + 1, d);
-                });
-            }
-        };
-        childCount(0, root);
-        var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line  
-        console.log(newHeight);
-        tree = tree.size([newHeight, viewerWidth]);
-
-        var nodes = tree.nodes(root).reverse();
-        var node = svgGroup.selectAll("g.node")
-            .data(nodes, function(d) {
-                return d.id || (d.id = ++i);
-            });
-    };
-
-    var update = function(source) {
+    function update(source) {
         // Compute the new height, function counts total children of root node and sets tree height accordingly.
         // This prevents the layout looking squashed when new nodes are made visible or looking sparse when nodes are removed
         // This makes the layout more consistent.
@@ -355,8 +359,7 @@ d3.chart.architectureTree = function() {
             }
         };
         childCount(0, root);
-        var newHeight = d3.max(levelWidth) * 25; // 25 pixels per line  
-        console.log(newHeight);
+        var newHeight = d3.max(levelWidth) * 60; // 50 pixels per line  
         tree = tree.size([newHeight, viewerWidth]);
 
         // Compute the new tree layout.
@@ -365,33 +368,33 @@ d3.chart.architectureTree = function() {
 
         // Set widths between levels based on maxLabelLength.
         nodes.forEach(function(d) {
-            d.y = (d.depth * (maxLabelLength * 10)); //maxLabelLength * 10px
+            d.y = (d.depth * (maxLabelLength * 5)); //maxLabelLength * 10px
             // alternatively to keep a fixed scale one can set a fixed depth per level
             // Normalize for fixed-depth by commenting out below line
             // d.y = (d.depth * 500); //500px per level.
         });
 
         // Update the nodes…
-        var node = svgGroup.selectAll("g.node")
+        node = svgGroup.selectAll("g.node")
             .data(nodes, function(d) {
                 return d.id || (d.id = ++i);
             });
 
         // Enter any new nodes at the parent's previous position.
         var nodeEnter = node.enter().append("g")
-            .call(dragListener)
+            // .call(dragListener)
             .attr("class", "node")
             .attr("transform", function(d) {
                 return "translate(" + source.y0 + "," + source.x0 + ")";
-            })
-            .on('click', click);
+            });
 
         nodeEnter.append("circle")
             .attr('class', 'nodeCircle')
             .attr("r", 0)
             .style("fill", function(d) {
                 return d._children ? "lightsteelblue" : "#fff";
-            });
+            })
+            .on('click', click);
 
         nodeEnter.append("text")
             .attr("x", function(d) {
@@ -405,7 +408,10 @@ d3.chart.architectureTree = function() {
             .text(function(d) {
                 return d.name;
             })
-            .style("fill-opacity", 0);
+            .style("fill-opacity", 0)
+            .on('click', function(d) {
+                main_timeline.goToEventOut(d.id);
+            });
 
         // phantom node to give us mouseover in a radius around it
         nodeEnter.append("circle")
@@ -510,13 +516,17 @@ d3.chart.architectureTree = function() {
             d.x0 = d.x;
             d.y0 = d.y;
         });
-    };
+    }
 
-    chart.data = function(value) {
-        if (!arguments.length) return treeData;
-        treeData = value;
-        return chart;
-    };
+    // Append a group which holds all nodes and which the zoom Listener can act upon.
+    var svgGroup = baseSvg.append("g");
 
-    return chart;
+    // Define the root
+    root = treeData;
+    root.x0 = viewerHeight / 2;
+    root.y0 = 0;
+
+    // Layout the tree initially and center on the root node.
+    update(root);
+    centerNode(root);
 };
