@@ -775,7 +775,7 @@ function createChart(json_data) {
             centerNode(root);
         });
         // console.log('chart done.');
-    }, 1000);
+    }, 100);
 }
 
 function createStoryJS(c, src) {
