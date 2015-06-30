@@ -63,7 +63,7 @@ var retrieveData = function() {
 	$.ajax({
 		type: 'GET',
 		dataType: 'json',
-		url: 'story-final.json',
+		url: 'story600.json',
 		data: {
 		},
 		error: function() {
@@ -75,8 +75,8 @@ var retrieveData = function() {
 			console.log(result);
 			timeline_config.source = result;
 			$('body .container').hide();
-			runningStoryline();
 			$('#timeline-embed').show();
+			runningStoryline();
 			$('.loading-modal').modal('hide');
 		},
 	});
